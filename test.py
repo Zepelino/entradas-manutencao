@@ -51,68 +51,87 @@ def update_entry(id_unico, new_entry):
             break
     save_data(data)
 
+# Função para deletar uma entrada
+def delete_entry(id_unico):
+    data = load_data()
+    data = [entry for entry in data if entry[0] != id_unico]  # Remove a entrada com o ID único
+    save_data(data)
+
 # Função principal para criar a interface gráfica
 def create_main_window():
     sg.theme("Reddit")
 
+    # Layout da tela principal
     layout_main = [
-        [sg.Text('Arrumador 3000', font='Helvetica 32 bold', expand_x=True, justification='center')],
-        [sg.Button('Buscar no registo', font='Helvetica 16', key="-btRead-", size=(0, 3)),
-         sg.Button('Adicionar ao registro', font='Helvetica 16', key="-btWrite-", size=(0, 3))]
+        [sg.Text('Arrumador 3000', font='Helvetica 32 bold', expand_x=True, justification='center', pad=(0, 20))],
+        [sg.Button('Buscar no registo', font='Helvetica 16', key="-btRead-", size=(20, 2), pad=(10, 10)),
+         sg.Button('Adicionar ao registro', font='Helvetica 16', key="-btWrite-", size=(20, 2), pad=(10, 10))]
     ]
 
+    # Layout da tela de escrita
     layout_write = [
-        [sg.Text('Gravador 3000', font='Helvetica 32 bold', expand_x=True, justification='center')],
-        [sg.Text('Cliente:'), sg.Input(key='-inpWClient-')],
-        [sg.Text('Tipo do equipamento:'), sg.Input(key='-inpWType-')],
-        [sg.Text('Fabricante:'), sg.Input(key='-inpWFab-')],
-        [sg.Text('Identificação:'), sg.Input(key='-inpWID-')],
-        [sg.Text('Orçamento:'), sg.Multiline(key='-inpWBudget-', size=(40, 5))],
-        [sg.Text('Data de entrada:'), sg.Input(key='-inpWArrive-')],
-        [sg.Button('Cancelar', key='-btWCancel-'), sg.Button('Submeter', key='-btWSub-')]
+        [sg.Text('Gravador 3000', font='Helvetica 32 bold', expand_x=True, justification='center', pad=(0, 20))],
+        [sg.Text('Cliente:', size=(15, 1)), sg.Input(key='-inpWClient-', size=(40, 1))],
+        [sg.Text('Tipo do equipamento:', size=(15, 1)), sg.Input(key='-inpWType-', size=(40, 1))],
+        [sg.Text('Fabricante:', size=(15, 1)), sg.Input(key='-inpWFab-', size=(40, 1))],
+        [sg.Text('Identificação:', size=(15, 1)), sg.Input(key='-inpWID-', size=(40, 1))],
+        [sg.Text('Orçamento:', size=(15, 1)), sg.Multiline(key='-inpWBudget-', size=(40, 5))],
+        [sg.Text('Data de entrada:', size=(15, 1)), sg.Input(key='-inpWArrive-', size=(40, 1))],
+        [sg.Button('Cancelar', key='-btWCancel-', size=(10, 1), pad=(10, 20)),
+         sg.Button('Submeter', key='-btWSub-', size=(10, 1), pad=(10, 20))]
     ]
 
+    # Layout da tela de busca
     layout_search = [
-        [sg.Text('Procuração 3000', font='Helvetica 32 bold', expand_x=True, justification='center')],
-        [sg.Text('Cliente:'), sg.Input(key='-inpSClient-')],
-        [sg.Text('Tipo do equipamento:'), sg.Input(key='-inpSType-')],
-        [sg.Text('Fabricante:'), sg.Input(key='-inpSFab-')],
-        [sg.Text('Identificação:'), sg.Input(key='-inpSID-')],
-        [sg.Text('Data de entrada:'), sg.Input(key='-inpSArrive-')],
-        [sg.Button('Cancelar', key='-btSCancel-'), sg.Button('Procurar', key='-btSSub-')]
+        [sg.Text('Procuração 3000', font='Helvetica 32 bold', expand_x=True, justification='center', pad=(0, 20))],
+        [sg.Text('Cliente:', size=(15, 1)), sg.Input(key='-inpSClient-', size=(40, 1))],
+        [sg.Text('Tipo do equipamento:', size=(15, 1)), sg.Input(key='-inpSType-', size=(40, 1))],
+        [sg.Text('Fabricante:', size=(15, 1)), sg.Input(key='-inpSFab-', size=(40, 1))],
+        [sg.Text('Identificação:', size=(15, 1)), sg.Input(key='-inpSID-', size=(40, 1))],
+        [sg.Text('Data de entrada:', size=(15, 1)), sg.Input(key='-inpSArrive-', size=(40, 1))],
+        [sg.Button('Cancelar', key='-btSCancel-', size=(10, 1), pad=(10, 20)),
+         sg.Button('Procurar', key='-btSSub-', size=(10, 1), pad=(10, 20))]
     ]
 
+    # Layout da lista de resultados
     layout_search_list = [
-        [sg.Text('Lista de Resultados', font='Helvetica 32 bold', expand_x=True, justification='center')],
+        [sg.Text('Lista de Resultados', font='Helvetica 32 bold', expand_x=True, justification='center', pad=(0, 20))],
         [sg.Table(values=[], headings=['Cliente', 'Equipamento', 'Fabricante', 'ID Equipamento', 'Data Entrada', 'Data Saída'],
-                  auto_size_columns=True, justification='left', num_rows=10, key='-results_table-')],
-        [sg.Button('Voltar', key='-btSLBack-'), sg.Button('Acessar', key='-btSLAccess-')]
+                  auto_size_columns=True, justification='left', num_rows=10, key='-results_table-', pad=(10, 10))],
+        [sg.Button('Voltar', key='-btSLBack-', size=(10, 1), pad=(10, 20)),
+         sg.Button('Acessar', key='-btSLAccess-', size=(10, 1), pad=(10, 20))]
     ]
 
+    # Layout da tela de leitura
     layout_read = [
-        [sg.Text('Leitura 3000', font='Helvetica 32 bold', expand_x=True, justification='center')],
-        [sg.Text('Cliente:'), sg.Text('', key='rd_client')],
-        [sg.Text('Equipamento:'), sg.Text('', key='rd_equip')],
-        [sg.Text('Fabricante:'), sg.Text('', key='rd_fab')],
-        [sg.Text('Identificação:'), sg.Text('', key='rd_id')],
-        [sg.Text('Data de entrada:'), sg.Text('', key='rd_arrive_date')],
-        [sg.Text('Data de saída:'), sg.Text('', key='rd_depart_date')],
-        [sg.Text('Orçamento:'), sg.Multiline('', key='rd_budget', size=(40, 5))],
-        [sg.Button('Voltar', key='-btRBack-'), sg.Button('Editar', key='-btREdit-')]
+        [sg.Text('Leitura 3000', font='Helvetica 32 bold', expand_x=True, justification='center', pad=(0, 20))],
+        [sg.Text('Cliente:', size=(15, 1)), sg.Text('', key='rd_client', size=(40, 1))],
+        [sg.Text('Equipamento:', size=(15, 1)), sg.Text('', key='rd_equip', size=(40, 1))],
+        [sg.Text('Fabricante:', size=(15, 1)), sg.Text('', key='rd_fab', size=(40, 1))],
+        [sg.Text('Identificação:', size=(15, 1)), sg.Text('', key='rd_id', size=(40, 1))],
+        [sg.Text('Data de entrada:', size=(15, 1)), sg.Text('', key='rd_arrive_date', size=(40, 1))],
+        [sg.Text('Data de saída:', size=(15, 1)), sg.Text('', key='rd_depart_date', size=(40, 1))],
+        [sg.Text('Orçamento:', size=(15, 1)), sg.Multiline('', key='rd_budget', size=(40, 5), disabled=True)],
+        [sg.Button('Voltar', key='-btRBack-', size=(10, 1), pad=(10, 20)),
+         sg.Button('Editar', key='-btREdit-', size=(10, 1), pad=(10, 20))]
     ]
 
+    # Layout da tela de edição
     layout_edit = [
-        [sg.Text('Editor 3000', font='Helvetica 32 bold', expand_x=True, justification='center')],
-        [sg.Text('Cliente:'), sg.Input(key='-inpEClient-')],
-        [sg.Text('Tipo do equipamento:'), sg.Input(key='-inpEType-')],
-        [sg.Text('Fabricante:'), sg.Input(key='-inpEFab-')],
-        [sg.Text('Identificação:'), sg.Input(key='-inpEID-')],
-        [sg.Text('Orçamento:'), sg.Multiline(key='-inpEBudget-', size=(40, 5))],
-        [sg.Text('Data de chegada:'), sg.Input(key='-EArriveDate-')],
-        [sg.Text('Data de saída:'), sg.Input(key='-EDepartureDate-')],
-        [sg.Button('Cancelar', key='-btECancel-'), sg.Button('Modificar', key='-btESub-')]
+        [sg.Text('Editor 3000', font='Helvetica 32 bold', expand_x=True, justification='center', pad=(0, 20))],
+        [sg.Text('Cliente:', size=(15, 1)), sg.Input(key='-inpEClient-', size=(40, 1))],
+        [sg.Text('Tipo do equipamento:', size=(15, 1)), sg.Input(key='-inpEType-', size=(40, 1))],
+        [sg.Text('Fabricante:', size=(15, 1)), sg.Input(key='-inpEFab-', size=(40, 1))],
+        [sg.Text('Identificação:', size=(15, 1)), sg.Input(key='-inpEID-', size=(40, 1))],
+        [sg.Text('Orçamento:', size=(15, 1)), sg.Multiline(key='-inpEBudget-', size=(40, 5))],
+        [sg.Text('Data de chegada:', size=(15, 1)), sg.Input(key='-EArriveDate-', size=(40, 1))],
+        [sg.Text('Data de saída:', size=(15, 1)), sg.Input(key='-EDepartureDate-', size=(40, 1))],
+        [sg.Button('Cancelar', key='-btECancel-', size=(10, 1), pad=(10, 20)),
+         sg.Button('Modificar', key='-btESub-', size=(10, 1), pad=(10, 20)),
+         sg.Button('Deletar', key='-btEDelete-', size=(10, 1), button_color=('white', 'red'), pad=(10, 20))]
     ]
 
+    # Layout geral
     layout = [
         [sg.Column(layout_main, key='-MAIN_PAGE-', visible=True),
          sg.Column(layout_write, key='-WRITE_PAGE-', visible=False),
@@ -135,11 +154,24 @@ def create_main_window():
 
         if state == "MAIN":
             if event == "-btRead-":
+                # Limpa os campos de busca ao mudar para a aba de busca
+                window['-inpSClient-'].update('')
+                window['-inpSType-'].update('')
+                window['-inpSFab-'].update('')
+                window['-inpSID-'].update('')
+                window['-inpSArrive-'].update('')
                 window['-MAIN_PAGE-'].update(visible=False)
                 window['-SEARCH_PAGE-'].update(visible=True)
                 state = "SEARCH"
 
             if event == "-btWrite-":
+                # Limpa os campos de escrita ao mudar para a aba de escrita
+                window['-inpWClient-'].update('')
+                window['-inpWType-'].update('')
+                window['-inpWFab-'].update('')
+                window['-inpWID-'].update('')
+                window['-inpWBudget-'].update('')
+                window['-inpWArrive-'].update('')
                 window['-MAIN_PAGE-'].update(visible=False)
                 window['-WRITE_PAGE-'].update(visible=True)
                 state = "WRITE"
@@ -293,10 +325,35 @@ def create_main_window():
                 # Atualiza a entrada no arquivo .txt
                 update_entry(id_unico, new_entry)
 
+                # Atualiza a tela de leitura com os novos dados
+                window['rd_client'].update(cliente)
+                window['rd_equip'].update(tipo)
+                window['rd_fab'].update(fabricante)
+                window['rd_id'].update(id_equipamento)
+                window['rd_arrive_date'].update(data_entrada)
+                window['rd_depart_date'].update(data_saida if data_saida else "Ainda na empresa")
+                window['rd_budget'].update(orcamento)
+
                 sg.popup("Entrada atualizada com sucesso!")
                 window['-EDIT_PAGE-'].update(visible=False)
                 window['-READ_PAGE-'].update(visible=True)
                 state = "READ"
+
+            if event == "-btEDelete-":
+                # Confirmação antes de deletar
+                confirm = sg.popup_yes_no("Tem certeza que deseja deletar esta entrada?", title="Confirmar Deleção")
+                if confirm == "Yes":
+                    # Obtém o ID único da entrada selecionada
+                    selected_entry_index = values['-results_table-'][0]
+                    id_unico = resultados[selected_entry_index][0]
+
+                    # Deleta a entrada
+                    delete_entry(id_unico)
+
+                    sg.popup("Entrada deletada com sucesso!")
+                    window['-EDIT_PAGE-'].update(visible=False)
+                    window['-MAIN_PAGE-'].update(visible=True)
+                    state = "MAIN"
 
     window.close()
 
