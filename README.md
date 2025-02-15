@@ -1,0 +1,1 @@
+Esse projeto trata-se de um organizador de entradas de manutenção para uma empresa de manutenção de equipamentos. Ele mantém registro do básico necessário para uma entrada de manutenção, como nome do cliente, tipo de equipamento, fabricante e identificação do mesmo, e orçamento da manutenção, bem como data de entrada e de saída do equipamento
